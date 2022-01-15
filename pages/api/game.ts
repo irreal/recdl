@@ -18,24 +18,14 @@ export default async function handler(
     res.status(405).end();
     return;
   }
-  const id = req.body.id;
-  const guess = req.body.guess;
-  if (!id || !guess) {
-    res.status(400).end();
-    return;
-  }
-
   const repository = await getRepository();
-  const game = await repository.fetch(id);
-  if (!game || !game.entityId || game.entityId !== id || !game.word) {
-    res.status(404).end();
-    return;
-  }
+  const game = repository.createEntity();
   const wordService = new WordService();
-  const guessResponse = wordService.getGuessReport(game.word, guess);
-  game.addGuess(guessResponse);
+  game.word = wordService.getRandomWord();
   await repository.save(game);
-  res
-    .status(200)
-    .json({ id, length: game.word.length, guesses: game.getGuesses() });
+  res.status(200).json({
+    id: game.entityId,
+    length: game.word.length,
+    guesses: game.getGuesses(),
+  });
 }

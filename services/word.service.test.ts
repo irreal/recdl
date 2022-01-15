@@ -24,12 +24,15 @@ test("invalid guess", () => {
   expect(() => {
     service.getGuessReport("", "hello");
   }).toThrow();
-  expect(() => {
-    service.getGuessReport("he", "hello");
-  }).toThrow();
-  expect(() => {
-    service.getGuessReport("hello", "he");
-  }).toThrow();
+});
+
+test("invalid length", () => {
+  const service = new WordService();
+  const response = service.getGuessReport("hello", "hell");
+  expect(response).toEqual({
+    type: GuessResponseType.IncorrectGuessLength,
+    characterInfo: [],
+  });
 });
 
 const correctResponse = {

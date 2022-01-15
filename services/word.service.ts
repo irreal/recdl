@@ -14,8 +14,14 @@ export class WordService {
   }
 
   getGuessReport(word: string, guess: string): GuessResponse {
-    if (!guess || !word || guess.length !== word.length) {
+    if (!guess || !word) {
       throw new Error("invalid input");
+    }
+    if (guess.length !== word.length) {
+      return {
+        type: GuessResponseType.IncorrectGuessLength,
+        characterInfo: [],
+      };
     }
     const guessValidWord = this.isWordPresent(guess);
     if (!guessValidWord) {
