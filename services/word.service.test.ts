@@ -49,6 +49,7 @@ test("correct guess", () => {
   const service = new WordService();
   expect(service.getGuessReport("papir", "papir")).toEqual(correctResponse);
   expect(service.getGuessReport("slika", "slika")).toEqual(correctResponse);
+  expect(service.getGuessReport("SLika", "slika")).toEqual(correctResponse);
 });
 
 test("invalid word guess", () => {

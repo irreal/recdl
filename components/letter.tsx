@@ -1,4 +1,4 @@
-import React from "React";
+import React from "react";
 import { CharacterMatch } from "../services/character-match.enum";
 
 function Letter({ letter, status }: { letter: string, status: CharacterMatch | null }) {

@@ -55,6 +55,7 @@ const Home: NextPage = () => {
           <div className="card-body">
             <div className="card-title">Pokušajte da pogodite reč</div>
             {game?.guesses.filter(g => g.type !== GuessResponseType.IncorrectGuessLength && g.type !== GuessResponseType.GuessNotAValidWord).map((guess, index) => <div key={index}><Word word={guess.guess} characterInfo={guess.characterInfo} /></div>)}
+            <div><Word word={' '.repeat(game?.length ?? 0)} characterInfo={undefined} /></div>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Pokušaj:</span>

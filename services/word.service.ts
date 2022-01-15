@@ -32,7 +32,10 @@ export class WordService {
         guess,
       };
     }
-    const matches = this.getCharacterMatches(word, guess);
+    const matches = this.getCharacterMatches(
+      word.toLowerCase(),
+      guess.toLowerCase()
+    );
     return {
       type: this.getResponseTypeFromMatches(matches),
       characterInfo: matches,
