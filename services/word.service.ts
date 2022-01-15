@@ -21,6 +21,7 @@ export class WordService {
       return {
         type: GuessResponseType.IncorrectGuessLength,
         characterInfo: [],
+        guess,
       };
     }
     const guessValidWord = this.isWordPresent(guess);
@@ -28,12 +29,14 @@ export class WordService {
       return {
         type: GuessResponseType.GuessNotAValidWord,
         characterInfo: [],
+        guess,
       };
     }
     const matches = this.getCharacterMatches(word, guess);
     return {
       type: this.getResponseTypeFromMatches(matches),
       characterInfo: matches,
+      guess,
     };
   }
 
