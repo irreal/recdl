@@ -10,6 +10,7 @@ type gameData = { length: number, id: string, guess: string, guesses: GuessRespo
 const Home: NextPage = () => {
   const formRef = useRef(null)
   const [game, setGame] = useState<gameData | null>(null);
+  const [msg, setMsg] = useState<string>('');
   useEffect(() => {
     async function getNewGame() {
       const response = await fetch('/api/game', { method: 'POST' });
@@ -28,6 +29,20 @@ const Home: NextPage = () => {
       const response = await fetch(`/api/guess`, { method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ guess, id: game?.id }) });
       const data = (await response.json()) as gameData;
       setGame(data);
+      setMsg("");
+      if (data && data.guesses && data.guesses.length > 0) {
+        const latestGuess = data.guesses[data.guesses.length - 1];
+        if (latestGuess.type === GuessResponseType.Correct) {
+          setMsg('Tačna reč, svaka čast!');
+        }
+        if (latestGuess.type === GuessResponseType.GuessNotAValidWord) {
+          setMsg('Reč koju ste uneli nije prepoznata.');
+        }
+        if (latestGuess.type === GuessResponseType.IncorrectGuessLength) {
+          setMsg(`Morate uneti reč od ${game?.length} slova`);
+        }
+      }
+      form['guess'].value = '';
     }
 
     makeGuess();
@@ -56,6 +71,7 @@ const Home: NextPage = () => {
             <div className="card-title">Pokušajte da pogodite reč</div>
             {game?.guesses.filter(g => g.type !== GuessResponseType.IncorrectGuessLength && g.type !== GuessResponseType.GuessNotAValidWord).map((guess, index) => <div key={index}><Word word={guess.guess} characterInfo={guess.characterInfo} /></div>)}
             <div><Word word={' '.repeat(game?.length ?? 0)} characterInfo={undefined} /></div>
+            <span>{msg}</span>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Pokušaj:</span>
