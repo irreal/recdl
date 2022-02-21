@@ -43,6 +43,24 @@ export class WordService {
     };
   }
 
+  getHint(word: string, guesses: GuessResponse[]): string {
+    let letters = word.split("").map((l, idx) => ({ letter: l, index: idx }));
+    const hint: string[] = new Array(word.length).fill("?");
+    guesses.forEach((guess) => {
+      guess.characterInfo.forEach((ci, idx) => {
+        if (ci === CharacterMatch.Correct) {
+          hint[idx] = guess.guess[idx];
+          letters = letters.filter((l) => l.index !== idx);
+        }
+      });
+    });
+    if (letters.length) {
+      const hintLetter = letters[0];
+      hint[hintLetter.index] = hintLetter.letter;
+    }
+    return hint.join("");
+  }
+
   getResponseTypeFromMatches(matches: CharacterMatch[]): GuessResponseType {
     if (matches.find((m) => m !== CharacterMatch.Correct)) {
       return GuessResponseType.Incorrect;

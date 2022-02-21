@@ -11,6 +11,7 @@ const Home: NextPage = () => {
   const formRef = useRef(null)
   const [game, setGame] = useState<gameData | null>(null);
   const [msg, setMsg] = useState<string>('');
+  const [hint, setHint] = useState<string>('');
   useEffect(() => {
     async function getNewGame() {
       const response = await fetch('/api/game', { method: 'POST' });
@@ -20,6 +21,11 @@ const Home: NextPage = () => {
     }
     getNewGame();
   }, [setGame]);
+  const getHint = async () => {
+    const response = await fetch('/api/hint', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: game?.id }) });
+    const data = await response.json() as { hint: string };
+    setHint(data.hint);
+  };
   const handleSubmission = (e: React.FormEvent) => {
     e.preventDefault();
     const form = formRef.current as any;
@@ -79,6 +85,10 @@ const Home: NextPage = () => {
               <form ref={formRef} onSubmit={handleSubmission}>
                 <input id="guess" type="text" placeholder="" className="input input-lg input-bordered"></input>
               </form>
+              <div className="my-10">
+                <button className="btn btn-outline mx-5" onClick={getHint}>Pomoć</button>
+                {hint && <span>Hint: {hint}</span>}
+              </div>
             </div>
           </div>
         </div>

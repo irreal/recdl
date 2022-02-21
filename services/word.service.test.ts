@@ -47,9 +47,18 @@ const correctResponse = {
 };
 test("correct guess", () => {
   const service = new WordService();
-  expect(service.getGuessReport("papir", "papir")).toEqual(correctResponse);
-  expect(service.getGuessReport("slika", "slika")).toEqual(correctResponse);
-  expect(service.getGuessReport("SLika", "slika")).toEqual(correctResponse);
+  expect(service.getGuessReport("papir", "papir")).toEqual({
+    ...correctResponse,
+    guess: "papir",
+  });
+  expect(service.getGuessReport("slika", "slika")).toEqual({
+    ...correctResponse,
+    guess: "slika",
+  });
+  expect(service.getGuessReport("SLika", "slika")).toEqual({
+    ...correctResponse,
+    guess: "slika",
+  });
 });
 
 test("invalid word guess", () => {
@@ -72,32 +81,13 @@ test("incorrect guess", () => {
   expect(guessResponse).toEqual({
     type: GuessResponseType.Incorrect,
     characterInfo: incorrectMatchInfo,
+    guess: "slika",
   });
+});
 
-  const guessResponse2 = service.getGuessReport("zdrav", "ždral");
-  const incorrectMatchInfo2 = [
-    CharacterMatch.Miss,
-    CharacterMatch.Correct,
-    CharacterMatch.Correct,
-    CharacterMatch.Correct,
-    CharacterMatch.Miss,
-  ];
-  expect(guessResponse2).toEqual({
-    type: GuessResponseType.Incorrect,
-    characterInfo: incorrectMatchInfo2,
-  });
-
-  const guessResponse3 = service.getGuessReport("milana", "lamela");
-  const incorrectMatchInfo3 = [
-    CharacterMatch.WrongSpot,
-    CharacterMatch.WrongSpot,
-    CharacterMatch.WrongSpot,
-    CharacterMatch.Miss,
-    CharacterMatch.Miss,
-    CharacterMatch.Correct,
-  ];
-  expect(guessResponse3).toEqual({
-    type: GuessResponseType.Incorrect,
-    characterInfo: incorrectMatchInfo3,
-  });
+test.only("hints", () => {
+  const service = new WordService();
+  const guessResponse = service.getGuessReport("zdrav", "zraci");
+  const hint = service.getHint("zdrav", [guessResponse]);
+  expect(hint).toEqual("?l?k??");
 });
