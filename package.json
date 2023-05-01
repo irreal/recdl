@@ -11,11 +11,12 @@
     "coverage": "vitest --coverage"
   },
   "dependencies": {
+    "@vercel/kv": "^0.1.0",
     "daisyui": "^1.23.0",
     "next": "12.0.8",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "redis-om": "^0.1.7",
+    "short-uuid": "^4.2.2",
     "vite": "^2.7.12"
   },
   "devDependencies": {
